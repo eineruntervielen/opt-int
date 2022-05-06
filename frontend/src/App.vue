@@ -8,5 +8,12 @@
 <script>
 export default {
   name: "App",
+    created() {
+    const response = fetch('/api').then(data => console.log('data', data))
+      .catch(e => {
+        console.error('Error:', e);
+      })
+    console.log(response)
+  },
 };
 </script>

@@ -1,13 +1,13 @@
 <template>
-  <img src="./../assets/web2.jpg" class="w-screen h-screen absolute opacity-40 -z-10" />
   <div class="flex flex-row h-screen justify-center items-center">
+    <img src="./../assets/web2.jpg" class="w-screen h-screen absolute opacity-40" />
     <LPGenForm class="mx-5" @change-form="setNewValues" />
     <LPForm class="mx-5" @solve="sendToSolve" :lpModel="lpModel" />
   </div>
 </template>
 
 <script>
-const testURL = "/foo";
+const testURL = "/api";
 export default {
   name: "LP",
   data() {
@@ -27,11 +27,10 @@ export default {
       this.lpModel.nrCons = e.constraints
     },
     async getModel() {
-      const response = await fetch(testURL).then(data => console.log('data', data))
+      fetch('/api').then(r => r.json()).then(data => console.log('data', data))
         .catch(e => {
           console.error('Error:', e);
         })
-
     },
     async postModel() {
       const requestOptions = {
@@ -40,7 +39,7 @@ export default {
           "Content-Type": "application/json"
         }
       };
-      const response = await fetch(testURL, requestOptions).then(data => console.log('data', data))
+      await fetch(testURL, requestOptions).then(data => console.log('data', data))
         .catch(e => {
           console.error('Error:', e);
         })
