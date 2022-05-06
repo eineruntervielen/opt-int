@@ -1,0 +1,23 @@
+{
+  "name": "opt-int",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.3.1",
+    "@vue/cli-plugin-router": "~4.5.13",
+    "autoprefixer": "^10.4.7",
+    "postcss": "^8.4.13",
+    "tailwindcss": "^3.0.24",
+    "vite": "^2.9.5"
+  }
+}
