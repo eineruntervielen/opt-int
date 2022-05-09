@@ -3,10 +3,11 @@ import router from './router';
 import App from './App.vue'
 import LPGenForm from './components/lp_generator_form.vue'
 import LPForm from './components/lp_form.vue'
-import Sidebar from './components/sidebar.vue'
-import SBBtn from './components/sidebar_btn.vue'
+import Navbar from './components/Navbar.vue'
+import NavbarLink from './components/NavbarLink.vue'
 import Card from './components/card.vue'
 import Deck from './components/deck.vue'
+import TInput from './components/tinput.vue'
 import './index.css'
 
 
@@ -17,6 +18,7 @@ app.component('Card', Card)
 app.component('Deck', Deck)
 app.component('LPForm', LPForm)
 app.component('LPGenForm', LPGenForm)
-app.component('SBBtn', SBBtn)
-app.component('Sidebar', Sidebar)
+app.component('Navbar', Navbar)
+app.component('NavbarLink', NavbarLink)
+app.component('TInput', TInput)
 app.mount('#app')

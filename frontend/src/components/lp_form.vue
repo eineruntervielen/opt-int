@@ -1,22 +1,62 @@
 <template>
   <Card>
     <div v-if="lpModel.nrVars > 0">
-      <h1>Decision Variables</h1>
-      <p>Number of decision variables: {{ lpModel.nrVars }}</p>
-      <ul v-for="i in lpModel.nrVars" :key="i">
-        <div>
-          <span class="m-1">Nr. {{ i }}</span>
-          <label class="m-1" v>Name:</label>
-          <input class="m-1" >
-        </div>
-      </ul>
+      <h1 class="my-2 text-xl">Decision Variables</h1>
+      <table>
+        <thead>
+          <th>Id</th>
+          <th>lower bound</th>
+          <th>Name</th>
+          <th>upper bound</th>
+        </thead>
+        <tbody>
+          <tr v-for="i in lpModel.nrVars" :key="i">
+            <td>
+              <label class="mx-3">{{ i }}</label>
+            </td>
+            <td>
+              <TInput class="mx-3 w-20" />
+            </td>
+            <td>
+              <TInput class="mx-3 w-40" />
+            </td>
+            <td>
+              <TInput class="mx-3 w-20" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+    <hr class="m-5">
     <div v-if="lpModel.nrCons > 0">
-      <h1>Constraints</h1>
-      <p>Number of constraints: {{ lpModel.nrCons }}</p>
-      <ul v-for="i in lpModel.nrCons" :key="i">
-        <span class="m-1">Nr. {{ i }}</span>
-        <input class="m-1"> <input class="m-1"> <input class="m-1"> </ul>
+      <h1 class="my-2 text-xl">Constraints</h1>
+      <table>
+        <thead>
+          <th>Id</th>
+          <th>lower bound</th>
+          <th>variable</th>
+          <th>upper bound</th>
+        </thead>
+        <tbody>
+          <tr v-for="i in lpModel.nrCons" :key="i">
+            <td>
+              <label class="mx-3">{{ i }}</label>
+            </td>
+            <td>
+              <TInput class="mx-3 w-20" />
+            </td>
+            <td>
+              <TInput class="mx-3 w-40" />
+            </td>
+            <td>
+              <TInput class="mx-3 w-20" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-if="lpModel.nrCons == 0">
+      <p>No constraints in this model</p>
     </div>
     <button @click="solve"
       class=" shadow mx-auto border bg-slate-100 hover:bg-slate-200 rounded full text-gray-700 px-4 hover:scale-110 transition ">
