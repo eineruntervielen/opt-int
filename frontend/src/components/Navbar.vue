@@ -1,7 +1,7 @@
 <template>
-  <nav class=" flex fixed items-center w-screen bg-gray-700 opacity-95">
+  <nav class=" flex fixed items-center w-screen pt-4 opacity-95">
     <ul class="flex flex-1 justify-center mr-auto">
-      <router-link to="/home">
+      <router-link to="/">
         <NavbarLink name="Home" />
       </router-link>
       <router-link to="/lp">
@@ -15,7 +15,7 @@
     </ul>
     <ul class="flex flex-1 justify-center ml-auto">
       <router-link to="/info">
-        <NavbarLink name="Info" />
+        <NavbarLink name="Contact" />
       </router-link>
     </ul>
   </nav>

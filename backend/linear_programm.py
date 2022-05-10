@@ -1,8 +1,6 @@
 from dataclasses import dataclass
-from typing import List
 from enum import IntEnum
-
-from numpy import inner
+from typing import List
 
 
 class SolverType(IntEnum):

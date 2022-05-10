@@ -1,12 +1,13 @@
 <template>
-  <div id="app" class="font-sans">
+  <div id="app" class="font-mono">
     <Navbar />
     <router-view />
+    <Footer />
   </div>
 </template>
 
 <script>
-import Navbar from "./components/Navbar.vue";
+import Footer from "./components/Footer.vue";
 export default {
     name: "App",
     created() {
@@ -16,7 +17,7 @@ export default {
         });
         console.log(response);
     },
-    components: { Navbar }
+    components: { Footer }
 };
 </script>
 
