@@ -1,26 +1,25 @@
 <template>
   <div class="flex flex-row h-screen justify-center items-center">
-    <img src="./../assets/web2.jpg" class="background w-screen h-screen absolute opacity-40" />
+    <img src="./../assets/BackgroundLP.jpg" class="-z-10 w-screen h-screen absolute opacity-40" />
     <LPGenForm class="mx-5" @change-form="setNewValues" />
     <LPForm class="mx-5" @solve="sendToSolve" :lpModel="lpModel" />
+    <Transition>
+      <Card v-if="view.show">Your Result is: 5</Card>
+    </Transition>
   </div>
 </template>
 
 <script>
 // import * as linearProgram from "./linearProgram";
 const backendURL = "/api";
-
-
 export default {
-  name: "LP",
-  created() {
-    // solver = linearProgram.SolverType.GLOP;
-    // lp = linearProgram.LinearProgramm(
-    // )
 
-  },
+  name: "LP",
   data() {
     return {
+      view: {
+        show: false
+      },
       lpModel: {
         nrVars: 1,
         nrCons: 1,
@@ -28,7 +27,6 @@ export default {
     };
   },
   methods: {
-
     setNewValues(e) {
       this.lpModel.nrVars = e.variables
       this.lpModel.nrCons = e.constraints
@@ -52,10 +50,24 @@ export default {
         })
     },
     sendToSolve() {
-      console.log('get model')
-      this.getModel()
+      console.log('calling backend solver');
+      this.getModel();
+      this.view.show = true;
     },
   }
 
 };
 </script>
+
+<style>
+/* we will explain what these classes do next! */
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>

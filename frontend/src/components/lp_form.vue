@@ -58,10 +58,14 @@
     <div v-if="lpModel.nrCons == 0">
       <p>No constraints in this model</p>
     </div>
-    <button @click="solve"
-      class=" shadow mx-auto border bg-slate-100 hover:bg-slate-200 rounded full text-gray-700 px-4 hover:scale-110 transition ">
-      Solve
-    </button>
+    <hr class="w-52 mx-auto m-5">
+
+    <div>
+      <button @click="solve"
+        class=" shadow mx-auto border bg-slate-100 hover:bg-slate-200 rounded full text-gray-700 px-4 hover:scale-110 transition ">
+        Solve
+      </button>
+    </div>
   </Card>
 
 </template>
