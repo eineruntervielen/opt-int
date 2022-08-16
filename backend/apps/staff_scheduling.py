@@ -1,100 +1,161 @@
-"""Boilerplate from OR Tools"""
-from ortools.sat.python import cp_model
-from backend.apps.staff_scheduling_model import Solution
+from ortools.sat.python.cp_model import CpModel, CpSolver, IntVar, OPTIMAL
+from pydantic import BaseModel
 
-shiftRequests = {
-    'Sara': {
-        '2022-08-13': {
-            'shift_0': True,
-            'shift_1': False,
-            'shift_2': False
-        }
-    }
-}
+# Typing
+Shifts = dict[tuple[int, int, int], IntVar]
 
 
-def optimize():
-    # This program tries to find an optimal assignment of nurses to shifts
-    # (3 shifts per day, for 7 days), subject to some constraints (see below).
-    # Each nurse can request to be assigned to specific shifts.
-    # The optimal assignment maximizes the number of fulfilled shift requests.
-    #
-    shift_requests = [
-        [[0, 0, 1], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 0, 1]],
-        [[0, 0, 0], [0, 0, 0], [0, 1, 0], [0, 1, 0], [1, 0, 0], [0, 0, 0], [0, 0, 1]],
-        [[0, 1, 0], [0, 1, 0], [0, 0, 0], [1, 0, 0], [0, 0, 0], [0, 1, 0], [0, 0, 0]],
-        [[0, 0, 1], [0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 0], [1, 0, 0], [0, 0, 0]],
-        [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 0]]
-    ]
-    num_nurses = 5
-    num_shifts = 3
-    num_days = 7
-    all_nurses = range(num_nurses)  # first dimension
-    all_shifts = range(num_shifts)  # third dimension
-    all_days = range(num_days)  # second dimension
+class Solution(BaseModel):
+    status: int
+    conflicts: int
+    branches: int
+    wall_time: float
 
-    # Creates the model.
-    model = cp_model.CpModel()
 
-    # Creates shift variables.
-    # shifts[(n, d, s)]: nurse 'n' works shift 's' on day 'd'.
-    shifts = {}
-    for n in all_nurses:
-        for d in all_days:
-            for s in all_shifts:
-                shifts[(n, d, s)] = model.NewBoolVar('shift_n%id%is%i' % (n, d, s))
+def create_decision_variables(model: CpModel, shifts: dict, num_employees: int, num_days: int, num_shifts: int):
+    """Create shift variables
 
-    # Each shift is assigned to exactly one nurse in .
-    for d in all_days:
-        for s in all_shifts:
-            model.AddExactlyOne(shifts[(n, d, s)] for n in all_nurses)
+    :param model:
+    :param shifts:
+    :param num_employees:
+    :param num_days:
+    :param num_shifts:
+    """
+    for employee in range(num_employees):
+        for day in range(num_days):
+            for shift in range(num_shifts):
+                shifts[(employee, day, shift)] = model.NewBoolVar(name=f'shift_{employee=}_{day=}_{shift=}')
 
-    # Each nurse works at most one shift per day.
-    for n in all_nurses:
-        for d in all_days:
-            model.AddAtMostOne(shifts[(n, d, s)] for s in all_shifts)
 
-    # Try to distribute the shifts evenly, so that each nurse works
-    # min_shifts_per_nurse shifts. If this is not possible, because the total
-    # number of shifts is not divisible by the number of nurses, some nurses will
-    # be assigned one more shift.
-    min_shifts_per_nurse = (num_shifts * num_days) // num_nurses
-    if num_shifts * num_days % num_nurses == 0:
+def create_constraint_one_emp_per_shift(model: CpModel, shifts: Shifts, num_employees: int, num_days: int,
+                                        num_shifts: int):
+    """Each shift is assigned to exactly one nurse in .
+
+    :param model:
+    :param shifts:
+    :param num_employees:
+    :param num_days:
+    :param num_shifts:
+    """
+    for day in range(num_days):
+        for shift in range(num_shifts):
+            model.AddExactlyOne(shifts[(n, day, shift)] for n in range(num_employees))
+
+
+def create_constraint_max_one_shift_per_emp(model: CpModel, shifts: Shifts, num_employees: int, num_days: int,
+                                            num_shifts: int):
+    """Each employee works at most one shift per day.
+
+    :param model:
+    :param shifts:
+    :param num_employees:
+    :param num_days:
+    :param num_shifts:
+    """
+    for employee in range(num_employees):
+        for day in range(num_days):
+            model.AddAtMostOne(shifts[(employee, day, shift)] for shift in range(num_shifts))
+
+
+def create_min_max_shifts_per_employee(model: CpModel, shifts: Shifts, num_employees: int, num_days: int,
+                                       num_shifts: int):
+    """ Try to distribute the shifts evenly, so that each nurse works
+    min_shifts_per_nurse shifts. If this is not possible, because the total
+    number of shifts is not divisible by the number of nurses, some nurses will
+    be assigned one more shift.
+
+    :param model:
+    :param shifts:
+    :param num_employees:
+    :param num_days:
+    :param num_shifts:
+    """
+    min_shifts_per_nurse = (num_shifts * num_days) // num_employees
+
+    if num_shifts * num_days % num_employees == 0:
         max_shifts_per_nurse = min_shifts_per_nurse
     else:
         max_shifts_per_nurse = min_shifts_per_nurse + 1
-    for n in all_nurses:
+
+    for n in range(num_employees):
         num_shifts_worked = 0
-        for d in all_days:
-            for s in all_shifts:
+        for d in range(num_days):
+            for s in range(num_shifts):
                 num_shifts_worked += shifts[(n, d, s)]
         model.Add(min_shifts_per_nurse <= num_shifts_worked)
         model.Add(num_shifts_worked <= max_shifts_per_nurse)
 
-    # pylint: disable=g-complex-comprehension
+
+def create_and_solve_model(shift_requests) -> Solution:
+    """
+
+    :param shift_requests:
+    :return:
+    """
+    num_employees = len(shift_requests)
+    num_days = len(shift_requests[0])
+    num_shifts = len(shift_requests[0][0])
+
+    shifts_dv = {}
+    model = CpModel()
+
+    create_decision_variables(
+        model=model,
+        shifts=shifts_dv,
+        num_days=num_days,
+        num_shifts=num_shifts,
+        num_employees=num_employees
+    )
+    create_constraint_one_emp_per_shift(
+        model=model,
+        shifts=shifts_dv,
+        num_days=num_days,
+        num_shifts=num_shifts,
+        num_employees=num_employees
+    )
+    create_constraint_max_one_shift_per_emp(
+        model=model,
+        shifts=shifts_dv,
+        num_days=num_days,
+        num_shifts=num_shifts,
+        num_employees=num_employees
+    )
+    create_min_max_shifts_per_employee(
+        model=model,
+        shifts=shifts_dv,
+        num_days=num_days,
+        num_shifts=num_shifts,
+        num_employees=num_employees
+    )
+
     model.Maximize(
-        sum(shift_requests[n][d][s] * shifts[(n, d, s)] for n in all_nurses
-            for d in all_days for s in all_shifts))
+        sum(
+            shift_requests[n][d][s] * shifts_dv[(n, d, s)]
+            for n in range(num_employees)
+            for d in range(num_days)
+            for s in range(num_shifts)
+        )
+    )
 
     # Creates the solver and solve.
-    solver = cp_model.CpSolver()
+    solver = CpSolver()
     status = solver.Solve(model)
 
-    if status == cp_model.OPTIMAL:
+    if status == OPTIMAL:
+        min_shifts_per_nurse = (num_shifts * num_days) // num_employees
         print('Solution:')
-        for d in all_days:
+        for d in range(num_days):
             print('Day', d)
-            for n in all_nurses:
-                for s in all_shifts:
-                    if solver.Value(shifts[(n, d, s)]) == 1:
+            for n in range(num_employees):
+                for s in range(num_shifts):
+                    if solver.Value(shifts_dv[(n, d, s)]) == 1:
                         if shift_requests[n][d][s] == 1:
                             print('Nurse', n, 'works shift', s, '(requested).')
                         else:
-                            print('Nurse', n, 'works shift', s,
-                                  '(not requested).')
+                            print('Nurse', n, 'works shift', s, '(not requested).')
             print()
         print(f'Number of shift requests met = {solver.ObjectiveValue()}',
-              f'(out of {num_nurses * min_shifts_per_nurse})')
+              f'(out of {num_employees * min_shifts_per_nurse})')
     else:
         print('No optimal solution found !')
 
@@ -103,13 +164,12 @@ def optimize():
     print('  - conflicts: %i' % solver.NumConflicts())
     print('  - branches : %i' % solver.NumBranches())
     print('  - wall time: %f s' % solver.WallTime())
+    # test
+
     s = Solution(
+        status=status,
         conflicts=solver.NumConflicts(),
         branches=solver.NumBranches(),
         wall_time=solver.WallTime()
     )
     return s
-
-
-if __name__ == '__main__':
-    optimize()

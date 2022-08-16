@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.apps.staff_scheduling import optimize
+from backend.apps.staff_scheduling import create_and_solve_model
 
 origins = [
     "http://localhost",
@@ -18,9 +18,10 @@ app.add_middleware(
 )
 
 
-@app.get("/")
+@app.get("/staff_scheduling")
 def staff_scheduling_optimize():
-    status = optimize()
+    # deserialize model coming from frontend to datatype here
+    status = create_and_solve_model()
     return {'status': status}
 
 
