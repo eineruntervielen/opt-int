@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-row h-screen justify-center items-center">
-    <img src="./../assets/BackgroundLP.jpg" class="-z-10 w-screen h-screen absolute opacity-40" />
+    <img src="../../assets/BackgroundLP.jpg" class="-z-10 w-screen h-screen absolute opacity-40" />
     <LPGenForm class="mx-5" @change-form="setNewValues" />
     <LPForm class="mx-5" @solve="sendToSolve" :lpModel="lpModel" />
     <Transition>

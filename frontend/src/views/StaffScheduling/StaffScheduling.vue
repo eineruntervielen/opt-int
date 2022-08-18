@@ -45,7 +45,7 @@
                   type="checkbox"
                   v-for="(shift, sidx) in numberOfShifts"
                   :key="shift"
-                  v-model="shiftRequests[eidx][didx][sidx].value"
+                  v-model="shiftRequests[eidx][didx][sidx]"
               >
             </td>
           </tr>

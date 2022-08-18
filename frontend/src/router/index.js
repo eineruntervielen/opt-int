@@ -10,7 +10,7 @@ const routes = [
   {
     path: '/lp',
     name: 'LP',
-    component: () => import('../views/LP.vue')
+    component: () => import('../views/LinearProgramming/LP.vue')
   },
   {
     path: '/staffscheduling',
