@@ -1,5 +1,6 @@
-fastapi
-uvicorn[standard]
+ortools==9.3.10497
+fastapi==0.79.0
+uvicorn[standard]==0.18.2
 
-
-ortools
+# Testen
+pydantic==1.9.2

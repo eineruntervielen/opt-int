@@ -4,14 +4,14 @@
       <router-link to="/lp">
         <NavbarLink name="Linear Optimization" />
       </router-link>
-      <router-link to="/">
+      <router-link to="/staffscheduling">
         <NavbarLink name="Staff Scheduling" />
       </router-link>
     </ul>
     <ul class="flex">
       <router-link to="/">
         <img alt="OR-Tools Logo" src="./../assets/LogoORTools.png"
-          class="m-1 w-20 h-20 transform hover:scale-110 hover:cursor-pointer ease-in-out duration-300" />
+          class="m-1 w-10 h-10 transform hover:scale-110 hover:cursor-pointer ease-in-out duration-300" />
       </router-link>
     </ul>
     <ul class="flex flex-1 justify-center ml-auto">
