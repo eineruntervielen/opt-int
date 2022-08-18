@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.apps.staff_scheduling import create_and_solve_model
+from backend.apps.staff_scheduling import create_and_solve_model, ShiftRequest, Solution
 
 origins = [
     "http://localhost",
@@ -18,16 +18,12 @@ app.add_middleware(
 )
 
 
-@app.get("/staff_scheduling")
-def staff_scheduling_optimize():
-    # deserialize model coming from frontend to datatype here
-    status = create_and_solve_model()
-    return {'status': status}
+@app.get("/")
+def hello():
+    return {'hello': 1}
 
 
-# @app.get("/")
-# def read_root():
-#     return {
-#         "x": 1,
-#         "y": 0
-#     }
+@app.post("/staffscheduling/")
+def staff_scheduling_optimize(shift_requests: ShiftRequest) -> Solution:
+    solution: Solution = create_and_solve_model(shift_requests)
+    return solution
