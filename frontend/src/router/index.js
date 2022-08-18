@@ -10,12 +10,17 @@ const routes = [
   {
     path: '/lp',
     name: 'LP',
-    component: () => import(/* webpackChunkName: "about" */ '../views/LP.vue')
+    component: () => import('../views/LP.vue')
+  },
+  {
+    path: '/staffscheduling',
+    name: 'StaffScheduling',
+    component: () => import('../views/StaffScheduling/StaffScheduling.vue')
   },
   {
     path: '/contact',
     name: 'Contact',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Contact.vue')
+    component: () => import('../views/Contact.vue')
   },
 ]
 const router = createRouter({
