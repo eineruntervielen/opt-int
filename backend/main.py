@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.apps.staff_scheduling import create_and_solve_model, ShiftRequest, Solution
+from apps.staff_scheduling import create_and_solve_model, ShiftRequest, Solution
 
 origins = [
     "http://localhost",
