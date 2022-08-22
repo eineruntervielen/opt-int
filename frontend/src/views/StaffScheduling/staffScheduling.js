@@ -1,4 +1,4 @@
-class ShiftRequest {
+export default class ShiftRequest {
     constructor(numOfEmployees, numOfDays, numOfShifts) {
         this.numOfEmployees = numOfEmployees;
         this.numOfDays = numOfDays;
@@ -23,5 +23,3 @@ function createShiftRequestsArray(e, d, s) {
         )
     )
 }
-
-export default ShiftRequest

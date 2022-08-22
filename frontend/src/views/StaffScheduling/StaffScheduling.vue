@@ -1,8 +1,8 @@
 <template>
-  <div class="h-screen w-screen bg-sky-600">
+  <div class="h-screen w-screen bg-slate-700">
     <div class="grid grid-cols-3 p-40">
       <Card class="m-1">
-        <label>NrDays</label>
+        <label class="px-1 text-sm font-bold text-gray-700">Nr. of days</label>
         <input
             class="shadow border rounded text-gray-700 py-1 px-3 hover:shadow-inner transition"
             type="number" min="1" step="1" max="7"
@@ -10,7 +10,7 @@
         />
       </Card>
       <Card class="m-1">
-        <label>Shifts</label>
+        <label class="px-1 text-sm font-bold text-gray-700">Nr. of shifts</label>
         <input
             class="shadow border rounded text-gray-700 py-1 px-3 hover:shadow-inner transition"
             type="number" min="1" step="1" max="3"
@@ -18,7 +18,7 @@
         />
       </Card>
       <Card class="m-1">
-        <label>Employees</label>
+        <label class="px-1 text-sm font-bold text-gray-700">Nr. of employees</label>
         <input
             class="shadow border rounded text-gray-700 py-1 px-3 hover:shadow-inner transition"
             type="number" min="1" step="1" max="10"
@@ -26,26 +26,24 @@
         />
       </Card>
       <Card class="m-1 col-span-3">
-        <table class="border-separate border-spacing-2 border border-slate-900">
-          <thead class="border-slate-900">
+        <table class="border-separate border-spacing-2 border">
+          <thead>
           <tr>
-            <th class="border " v-for="day in numberOfDays" :key="day">Day {{ day }}</th>
+            <th class="border" v-for="(day, dayIndex) in shiftRequests[0].length" :key="day">Day {{ dayIndex }}</th>
           </tr>
           </thead>
           <tbody>
-          <tr
-              v-for="(emp, eidx) in numberOfEmployees"
+          <tr v-for="(emp, empIndex) in shiftRequests.length"
               :key="emp">
-            <td
-                class="border"
-                v-for="(day, didx) in numberOfDays"
-                :key="day">
-              <input
-                  class="w-10 m-2"
-                  type="checkbox"
-                  v-for="(shift, sidx) in numberOfShifts"
-                  :key="shift"
-                  v-model="shiftRequests[eidx][didx][sidx]"
+            <td v-for="(day, dayIndex) in shiftRequests[empIndex].length"
+                :key="day"
+                class="border">
+              <input v-for="(shift, shiftIndex) in shiftRequests[empIndex][dayIndex].length"
+                     :key="shift"
+                     :id="'e_' + empIndex + '_d_' + dayIndex + '_s_' + shiftIndex"
+                     v-model="shiftRequests[empIndex][dayIndex][shiftIndex]"
+                     class="w-10 m-2 checked:shadow-xl"
+                     type="checkbox"
               >
             </td>
           </tr>
@@ -67,15 +65,14 @@
 const backendURL = "/api/staffscheduling/";
 const initialNumDays = 5;
 const initialNumShifts = 3;
-const initialNumEmployees = 3;
+const initialNumEmployees = 5;
 
 function createShiftRequests(e, d, s) {
-  let arr = new Array(e).fill(
-      new Array(d).fill(
-          new Array(s).fill(false)
-      )
-  )
-  return arr
+  return Array.from(Array(e),
+      () => Array.from(Array(d),
+          () => Array.from(Array(s),
+              () => false)
+      ))
 }
 
 export default {

@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import router from './router';
 import App from './App.vue'
 import LPGenForm from './components/lp_generator_form.vue'
@@ -11,7 +11,6 @@ import Card from './components/card.vue'
 import Deck from './components/deck.vue'
 import TInput from './components/tinput.vue'
 import './index.css'
-
 
 
 const app = createApp(App)
