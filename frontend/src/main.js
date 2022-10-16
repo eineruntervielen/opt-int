@@ -11,10 +11,23 @@ import Card from './components/card.vue'
 import Deck from './components/deck.vue'
 import TInput from './components/tinput.vue'
 import './index.css'
+// primevue
+import PrimeVue from 'primevue/config';
+import 'primeicons/primeicons.css'
+import Chart from 'primevue/chart';
+import InputNumber from 'primevue/inputnumber';
+import Menubar from 'primevue/menubar';
+
+
 
 
 const app = createApp(App)
 app.use(router)
+app.use(PrimeVue)
+app.component('InputNumber', InputNumber)
+app.component('Menubar', Menubar)
+app.component('Chart', Chart);
+// componetns from ejk
 app.component('Card', Card)
 app.component('Deck', Deck)
 app.component('LPForm', LPForm)
