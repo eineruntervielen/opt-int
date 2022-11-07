@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from apps.staff_scheduling import create_and_solve_model, ShiftRequest, Solution
+from apps.random_selection import random_shift_selection
 
 origins = [
     "http://localhost",
@@ -37,12 +38,14 @@ async def get_shiftrequest() -> dict:
     }
 
 #post of random selection
+#so far it takes the last added list item and hands it over to not yet written function
+#and returns a dictionairy with the input data
+#to check if the post function works --> it does
 @app.post("/randomselection/", tags=['randomselections'])
 async def post_randem_selection() -> dict:
-    employees = shift_requests[-1]["num_employees"]
-    days = shift_requests[-1]["num_days"]
-    shifts = shift_requests[-1]["num_shifts"]
-    return "We have %s employees, who have to cover %s days with each %s shifts." %(employees,days,shifts)
+    print(shift_requests[-1])
+    random_result = random_shift_selection(shift_requests[-1])
+    return random_result
 
 
 #shift DB as test_version
