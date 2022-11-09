@@ -46,7 +46,7 @@ async def post_randem_selection():
     return random_result
 
 
-#shift DB as test_version
+#shift DB as test_version; default value
 shift_requests = [
     { "num_employees": 6,
     "num_days": 5,
