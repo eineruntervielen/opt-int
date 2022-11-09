@@ -42,15 +42,14 @@ async def get_shiftrequest() -> dict:
 #and returns a dictionairy with the input data
 #to check if the post function works --> it does
 @app.post("/randomselection/", tags=['randomselections'])
-async def post_randem_selection() -> dict:
-    print(shift_requests[-1])
+async def post_randem_selection():
     random_result = random_shift_selection(shift_requests[-1])
     return random_result
 
 
 #shift DB as test_version
 shift_requests = [
-    { "num_employees": 10,
+    { "num_employees": 6,
     "num_days": 5,
     "num_shifts": 2
     }
