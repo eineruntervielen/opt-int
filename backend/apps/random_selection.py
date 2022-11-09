@@ -7,6 +7,7 @@ def random_shift_selection(shift_requests) -> dict:
     shifts = shift_requests["num_shifts"]
     random_shift_schedule= []
 
+#Randomly distributed employees on each day & shift 
     for n in range(days):
         random_shift = []
         for i in range(shifts):

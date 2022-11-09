@@ -40,7 +40,6 @@ async def get_shiftrequest() -> dict:
 #post of random selection
 #so far it takes the last added list item and hands it over to not yet written function
 #and returns a dictionairy with the input data
-#to check if the post function works --> it does
 @app.post("/randomselection/", tags=['randomselections'])
 async def post_randem_selection():
     random_result = random_shift_selection(shift_requests[-1])
