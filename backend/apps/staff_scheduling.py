@@ -1,5 +1,3 @@
-from typing import List
-
 from ortools.sat.python.cp_model import CpModel, CpSolver, OPTIMAL
 from pydantic import BaseModel
 
@@ -8,7 +6,7 @@ class ShiftRequest(BaseModel):
     num_employees: int
     num_days: int
     num_shifts: int
-    shifts: List
+    shifts: list
 
 
 class Solution(BaseModel):
