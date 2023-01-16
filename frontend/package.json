@@ -8,10 +8,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "chart.js": "^3.9.1",
     "cors": "^2.8.5",
     "primeicons": "^6.0.1",
-    "primevue": "^3.17.0",
+    "primevue": "^3.22.1",
     "vue": "^3.2.25",
     "vue-router": "^4.0.13"
   },

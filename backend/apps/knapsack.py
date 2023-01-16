@@ -3,9 +3,17 @@ import logging
 from typing import TypedDict
 
 from ortools.algorithms import pywrapknapsack_solver
+from pydantic import BaseModel
 
 logger = logging.getLogger()
 logger.setLevel(level=0)
+
+
+class KnapsackModel(BaseModel):
+    name: str
+    capacities: list[int]
+    weights: list[list[int | float]]
+    values: list[int | float]
 
 
 class KnapsackProblem(TypedDict):
@@ -13,6 +21,14 @@ class KnapsackProblem(TypedDict):
     capacities: list[int]
     weights: list[list[int | float]]
     values: list[int | float]
+
+
+class KnapsackResult(TypedDict):
+    name: str
+    computed_value: int
+    packed_items: list
+    packed_weights: list
+    total_weight: int
 
 
 def create_and_solve(knapsack_problem: KnapsackProblem):
@@ -42,3 +58,10 @@ def create_and_solve(knapsack_problem: KnapsackProblem):
     print('Total weight:', total_weight)
     print('Packed items:', packed_items)
     print('Packed_weights:', packed_weights)
+    return KnapsackResult(
+        name=name,
+        computed_value=computed_value,
+        packed_items=packed_items,
+        packed_weights=packed_weights,
+        total_weight=total_weight
+    )

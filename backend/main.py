@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from apps.staff_scheduling import create_and_solve_model, ShiftRequest, Solution
-from apps.random_selection import random_shift_selection
+from .apps.knapsack import KnapsackProblem, create_and_solve, KnapsackModel
+from .apps.staff_scheduling import create_and_solve_model, ShiftRequest, Solution
+from .apps.random_selection import random_shift_selection
 
 origins = [
     "http://localhost",
@@ -22,6 +23,12 @@ app.add_middleware(
 @app.get("/")
 def hello():
     return {'hello': 1}
+
+
+@app.post("/knapsack")
+def knapsack_post(km: KnapsackModel):
+    kp = KnapsackProblem(km)
+    return create_and_solve(kp)
 
 
 # posting of staffscheduling result

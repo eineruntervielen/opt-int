@@ -1,51 +1,53 @@
 <template>
-  <nav :class="{ 'transition shadow duration-300 ease-in-out': !view.atTopOfPage }" class="backdrop-blur flex fixed items-center w-screen">
-    <ul class="flex flex-1 justify-center mr-auto">
-      <router-link to="/lp">
-        <NavbarLink name="Linear Optimization" />
-      </router-link>
-      <router-link to="/staffscheduling">
-        <NavbarLink name="Staff Scheduling" />
-      </router-link>
-    </ul>
-    <ul class="flex">
-      <router-link to="/">
-        <img alt="OR-Tools Logo" src="./../assets/img/LogoTessa.png"
-          class="m-1 w-20 transform hover:scale-110 hover:cursor-pointer ease-in-out duration-300" />
-      </router-link>
-    </ul>
-    <ul class="flex flex-1 justify-center ml-auto">
-      <router-link to="/contact">
-        <NavbarLink name="Contact" />
-      </router-link>
-    </ul>
-  </nav>
+  <Menubar :model="items">
+    <template #start>
+      <img class="w-10" src="../assets/img/LogoTessa.png" alt="">
+    </template>
+<!--    <template #end>-->
+<!--      <div class="flex">-->
+<!--        <img class="w-10" src="../assets/img/LogoDiscord.svg" alt="">-->
+<!--        <img class="w-10" src="../assets/img/LogoGithub.png" alt="">-->
+<!--      </div>-->
+<!--    </template>-->
+  </Menubar>
 </template>
 
 <script>
-import NavbarLink from "./NavbarLink.vue";
 export default {
   name: "Navbar",
-  components: { NavbarLink },
   data() {
     return {
-      view: {
-        atTopOfPage: true
-      }
-    }
-  },
-  beforeMount() {
-    window.addEventListener('scroll', this.handleScroll);
-  },
-
-  methods: {
-    handleScroll() {
-      if (window.pageYOffset > 0) {
-        if (this.view.atTopOfPage) this.view.atTopOfPage = false
-      } else {
-        if (!this.view.atTopOfPage) this.view.atTopOfPage = true
-      }
+      items: [
+        {
+          label: 'Home',
+          icon: 'pi pi-home',
+          to: '/'
+        },
+        {
+          label: 'Optimizer',
+          icon: 'pi pi-th-large',
+          items: [
+            {
+              label: 'Linear Programming',
+              to: '/lp'
+            },
+            {
+              label: 'Knapsack',
+              to: '/knapsack'
+            },
+            {
+              label: 'Staffscheduling',
+              to: '/staffscheduling'
+            },
+          ]
+        },
+        {
+          label: 'About',
+          icon: 'pi pi-fw pi-question-circle',
+          to: '/about'
+        },
+      ]
     }
   }
-};
-</script> 
+}
+</script>

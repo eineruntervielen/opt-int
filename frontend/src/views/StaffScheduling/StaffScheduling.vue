@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen w-screen bg-slate-700">
+  <div class="h-screen w-screen">
     <div class="grid grid-cols-3 p-40">
       <Card class="m-1">
         <label class="px-1 text-sm font-bold text-gray-700">Nr. of days</label>
